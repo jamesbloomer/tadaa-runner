@@ -4,7 +4,7 @@ var tadaa = require('tadaa'),
 fs.readdirSync("./plugins").forEach(function(dir) {
   
   // Assume that only sensible things are in the plugins directory
-  var plugin = require(dir);
+  var plugin = require("./plugins/" + dir);
     
   tadaa.start(
       plugin.interval || 600000, 
