@@ -16,7 +16,8 @@
     },
     "keywords": ["monitor", "sounds", "audio", "noises"],
     "dependencies": {
-        "tadaa": "*"
+        "tadaa": "*",
+        "npm": "*"
     },
     "devDependencies" : {
     },

@@ -1,0 +1,10 @@
+{
+	"alarm for xxx" : {
+		"name" : "exampleplugin", 
+		"options" : {
+			"multiplier" : 10
+		},
+		"interval" : 5000,
+		"player": "ogg123"
+	}
+}
