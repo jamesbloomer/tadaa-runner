@@ -1,8 +1,10 @@
-var tadaa = require('tadaa'),
+var _ = require('underscore'),
+	async = require('async'),
+	tadaa = require('tadaa'),
     fs = require("fs"),
     npm = require("npm");
 
-npm.load({}, function (er) {
+	npm.load({}, function (er) {
 	if (er) {
 		process.exit(1);
 	}
@@ -11,15 +13,13 @@ npm.load({}, function (er) {
    		console.log(message);
 	});
 
-	readPluginsFromFile(function(er) {
-		if (er) {
-			console.error(er);
+	loadPlugins(function(e) {
+		if (e) {
+			console.error(e);
 		}
 
 		return;
 	});
-
-	return;
 });
 
 var readPluginsFromDirectory = function() {
@@ -37,30 +37,27 @@ var readPluginsFromDirectory = function() {
 	});
 };
 
-var readPluginsFromFile = function(done) {
+var loadPlugins = function(done) {
 	var config = require("./config.json");
+	async.each(_.values(config), start, done);
+};
 
-	for (pluginInstance in config) {
-		var pluginConfig = config[pluginInstance];
+var start = function(pluginConfig, cb) {
+	npm.commands.install([pluginConfig.name], function (e, data) {
+		if (e) {
+			return cb(er);
+		}
 		
-		npm.commands.install([pluginConfig.name], function (er, data) {
-    		if (er) {
-    			return done(er);
-    		}
+		var plugin = require(pluginConfig.name);
 
-    		// TODO what's in data?
-			
-			var plugin = require(pluginConfig.name);
+		tadaa.start(
+			pluginConfig.interval || plugin.interval || 600000, 
+			pluginConfig.logic || plugin.logic || [{fn: tadaa.up, sound:"up.wav"}, {fn: tadaa.down, sound:"down.wav"}], 
+			plugin.getValue, 
+			pluginConfig.options || plugin.options || {}, 
+			pluginConfig.player || plugin.player || 'aplay'
+		);
 
-			tadaa.start(
-				pluginConfig.interval || plugin.interval || 600000, 
-				pluginConfig.logic || plugin.logic || [{fn: tadaa.up, sound:"up.wav"}, {fn: tadaa.down, sound:"down.wav"}], 
-				plugin.getValue, 
-				pluginConfig.options || plugin.options || {}, 
-				pluginConfig.player || plugin.player || 'aplay'
-			);
-
-			return done();
-		});
-	}
+		return cb();
+	});
 };

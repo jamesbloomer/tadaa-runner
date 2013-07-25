@@ -1,8 +1,9 @@
 {
-	"alarm for xxx" : {
-		"name" : "exampleplugin", 
+	"example alarm for elb" : {
+		"name" : "tadaa-elb", 
 		"options" : {
-			"multiplier" : 10
+			"region" : "us-east",
+			"elbName" : "myElb"
 		},
 		"interval" : 5000,
 		"player": "ogg123"

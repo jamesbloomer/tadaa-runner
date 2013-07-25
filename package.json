@@ -16,6 +16,8 @@
     },
     "keywords": ["monitor", "sounds", "audio", "noises"],
     "dependencies": {
+        "async": "*",
+        "underscore": "*",
         "tadaa": "*",
         "npm": "*"
     },
