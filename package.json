@@ -22,9 +22,10 @@
         "npm": "*"
     },
     "devDependencies" : {
+        "mocha": "*",
+        "sinon": "*"
     },
     "main": "./tadaa.js",
-    "bin": { "tadaa": "./bin/tadaa" },
     "scripts": { "test": "mocha test/*_test.js --reporter spec" },
     "engines": { "node": ">= 0.4.12 < 0.11.0" }
 }
