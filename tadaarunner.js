@@ -6,30 +6,29 @@ var _ = require('underscore'),
 
 var tadaarunner = {};
 
-tadaarunner.run = function() {
+tadaarunner.run = function(done) {
 	npm.load({}, function (e) {
 		if (e) {
-			process.exit(1);
+			return done(e);
 		}
 
 	  	npm.on("log", function (message) {
 	   		console.log(message);
 		});
 
-		loadPlugins(function(e) {
+		tadaarunner.loadPlugins(function(e) {
 			if (e) {
-				console.error(e);
+				return done(e);
 			}
 
-			return;
+			return done();
 		});
 	});
 };
 
-
 tadaarunner.loadPlugins = function(done) {
-	var config = require("./config.json");
-	async.each(_.values(config), start, done);
+	var config = tadaarunner._requireConfig("./config.json");
+	async.each(_.values(config), tadaarunner.start, done);
 };
 
 tadaarunner.start = function(pluginConfig, cb) {
@@ -38,7 +37,7 @@ tadaarunner.start = function(pluginConfig, cb) {
 			return cb(e);
 		}
 		
-		var plugin = require(pluginConfig.name);
+		var plugin = tadaarunner._requirePlugin(pluginConfig.name);
 
 		tadaa.start(
 			pluginConfig.interval || plugin.interval || 600000, 
@@ -50,6 +49,14 @@ tadaarunner.start = function(pluginConfig, cb) {
 
 		return cb();
 	});
+};
+
+tadaarunner._requireConfig = function(path) {
+	return require(path);
+};
+
+tadaarunner._requirePlugin = function(name) {
+	return require(name);
 };
 
 module.exports = tadaarunner;
