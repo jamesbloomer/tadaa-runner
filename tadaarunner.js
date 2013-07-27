@@ -16,7 +16,7 @@ tadaarunner.run = function(done) {
 	   		console.log(message);
 		});
 
-		tadaarunner.loadPlugins(function(e) {
+		tadaarunner._loadPlugins(function(e) {
 			if (e) {
 				return done(e);
 			}
@@ -26,12 +26,12 @@ tadaarunner.run = function(done) {
 	});
 };
 
-tadaarunner.loadPlugins = function(done) {
+tadaarunner._loadPlugins = function(done) {
 	var config = tadaarunner._requireConfig("./config.json");
-	async.each(_.values(config), tadaarunner.start, done);
+	async.each(_.values(config), tadaarunner._start, done);
 };
 
-tadaarunner.start = function(pluginConfig, cb) {
+tadaarunner._start = function(pluginConfig, cb) {
 	npm.commands.install([pluginConfig.name], function (e, data) {
 		if (e) {
 			return cb(e);

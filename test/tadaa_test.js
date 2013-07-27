@@ -5,7 +5,7 @@ var assert = require('assert'),
 	tadaarunner = require('../tadaarunner.js');
 
 describe('tadaa-runner', function() {
-	describe('start', function() {
+	describe('_start', function() {
 		var install;
 		var commands;
 
@@ -38,7 +38,7 @@ describe('tadaa-runner', function() {
 
 		it('should call npm install for plugin', function(done) {
 			install.yields();
-			tadaarunner.start({ name: "tadaa-elb"}, function() {
+			tadaarunner._start({ name: "tadaa-elb"}, function() {
 				assert(install.calledOnce);
 				assert.deepEqual(install.args[0][0], ["tadaa-elb"]);
 				return done();
@@ -47,7 +47,7 @@ describe('tadaa-runner', function() {
 
 		it('should return error if npm install fails', function(done) {
 			install.yields('ERROR');
-			tadaarunner.start({ name: "tadaa-elb"}, function(e) {
+			tadaarunner._start({ name: "tadaa-elb"}, function(e) {
 				assert.equal(tadaa.start.callCount, 0);
 				assert.equal(e, 'ERROR');
 				return done();
@@ -56,7 +56,7 @@ describe('tadaa-runner', function() {
 
 		it('should require the plugin module', function(done) {
 			install.yields();
-			tadaarunner.start({ name: "TEST"}, function() {
+			tadaarunner._start({ name: "TEST"}, function() {
 				assert(tadaarunner._requirePlugin.calledOnce);
 				return done();
 			})
@@ -64,7 +64,7 @@ describe('tadaa-runner', function() {
 
 		it('should call tadaa.start with config values if they exist', function(done) {
 			install.yields();
-			tadaarunner.start({ 
+			tadaarunner._start({ 
 				name: "TEST", 
 				interval: 24, 
 				logic: [{1 : "2"}, {3: "4"}],
@@ -82,7 +82,7 @@ describe('tadaa-runner', function() {
 
 		it('should call tadaa.start with plugin values if config values do not exist', function(done) {
 			install.yields();
-			tadaarunner.start({}, function() {
+			tadaarunner._start({}, function() {
 				assert(tadaa.start.calledOnce);
 				assert.equal(tadaa.start.args[0][0], 42);
 				assert.deepEqual(tadaa.start.args[0][1], [{11: "22"}, {33: "44"}]);
@@ -96,7 +96,7 @@ describe('tadaa-runner', function() {
 		it('should call tadaa.start with default values if config and plugin values do not exist', function(done) {
 			install.yields();
 			tadaarunner._requirePlugin.returns({});
-			tadaarunner.start({}, function() {
+			tadaarunner._start({}, function() {
 				assert(tadaa.start.calledOnce);
 				assert.equal(tadaa.start.args[0][0], 600000);
 				assert.deepEqual(tadaa.start.args[0][1], [{fn: tadaa.up, sound:"up.wav"}, {fn: tadaa.down, sound:"down.wav"}]);
@@ -107,22 +107,22 @@ describe('tadaa-runner', function() {
 		});
 	});
 
-	describe('loadPlugins', function() {
+	describe('_loadPlugins', function() {
 		beforeEach(function() {
-			sinon.stub(tadaarunner, 'start').yields();
+			sinon.stub(tadaarunner, '_start').yields();
 			sinon.stub(tadaarunner, '_requireConfig').returns({ 1 : "1", 2: "2"});
 		});
 
 		afterEach(function() {
-			tadaarunner.start.restore();
+			tadaarunner._start.restore();
 			tadaarunner._requireConfig.restore();
 		});
 
 		it('should call start for each plugin in config', function(done) {
-			tadaarunner.loadPlugins(function() {
-				assert(tadaarunner.start.calledTwice);
-				assert.equal(tadaarunner.start.args[0][0], '1');
-				assert.equal(tadaarunner.start.args[1][0], '2');
+			tadaarunner._loadPlugins(function() {
+				assert(tadaarunner._start.calledTwice);
+				assert.equal(tadaarunner._start.args[0][0], '1');
+				assert.equal(tadaarunner._start.args[1][0], '2');
 				return done();
 			});
 		});
@@ -131,16 +131,16 @@ describe('tadaa-runner', function() {
 	describe('run', function() {
 		beforeEach(function() {
 			sinon.stub(npm, 'load');
-			sinon.stub(tadaarunner, 'loadPlugins');
+			sinon.stub(tadaarunner, '_loadPlugins');
 		});
 
 		afterEach(function() {
 			npm.load.restore();
-			tadaarunner.loadPlugins.restore();
+			tadaarunner._loadPlugins.restore();
 		});
 
 		it('should load npm', function(done) {
-			tadaarunner.loadPlugins.yields();
+			tadaarunner._loadPlugins.yields();
 			npm.load.yields();
 			tadaarunner.run(function(e) {
 				assert.equal(e, null);
@@ -159,17 +159,17 @@ describe('tadaa-runner', function() {
 		});
 
 		it('should load plugins', function(done) {
-			tadaarunner.loadPlugins.yields();
+			tadaarunner._loadPlugins.yields();
 			npm.load.yields();
 			tadaarunner.run(function(e) {
 				assert.equal(e, null);
-				assert(tadaarunner.loadPlugins.calledOnce);
+				assert(tadaarunner._loadPlugins.calledOnce);
 				return done();
 			});
 		});
 
 		it('should return error if load plugins fails', function(done) {
-			tadaarunner.loadPlugins.yields('ERROR');
+			tadaarunner._loadPlugins.yields('ERROR');
 			npm.load.yields();
 			tadaarunner.run(function(e) {
 				assert.equal(e, 'ERROR');
