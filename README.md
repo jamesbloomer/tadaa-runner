@@ -13,6 +13,6 @@ npm install tadaa-runner
 
 ## Use
 - Edit config.json.
-- Copy sounds to root of module directory.
+- Copy sounds to root of module directory (issue [#1](https://github.com/jamesbloomer/tadaa-runner/issues/1)).
 - ./bin/tadaa
 
