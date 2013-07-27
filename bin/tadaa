@@ -1,3 +1,9 @@
 #!/usr/bin/env node
 
-require('../tadaarunner.js').run();
+require('../tadaarunner.js').run(function(e) {
+	if(e) {
+		console.error(e);
+	} else {
+		console.log('running...');
+	}
+});

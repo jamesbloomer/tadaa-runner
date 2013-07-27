@@ -1,11 +1,18 @@
 {
-	"example alarm for elb" : {
-		"name" : "tadaa-elb", 
+	"first example plugin instance" : {
+		"interval": 2000,
+		"name" : "tadaa-example", 
 		"options" : {
-			"region" : "us-east",
-			"elbName" : "myElb"
-		},
-		"interval" : 5000,
-		"player": "ogg123"
+			"message" : "first",
+			"multiplier" : 100
+		}
+	},
+	"second example plugin instance" : {
+		"interval": 3000,
+		"name" : "tadaa-example", 
+		"options" : {
+			"message" : "second",
+			"multiplier" : 10
+		}
 	}
 }
