@@ -12,8 +12,8 @@ tadaarunner.run = function(done) {
 			return done(e);
 		}
 
-	  	npm.on("log", function (message) {
-	   		console.log(message);
+		npm.on("log", function (message) {
+			console.log(message);
 		});
 
 		tadaarunner._loadPlugins(function(e) {

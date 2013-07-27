@@ -15,7 +15,7 @@ describe('tadaa-runner', function() {
 			var mockplugin = { 
 				interval: 42, 
 				logic: [{11: "22"}, {33: "44"}], 
-				getValue: function(){ return 123456789}, 
+				getValue: function(){ return 123456789; }, 
 				options: { A: "AA", B: "BB"}, 
 				player: 'anotherplayer'
 			};
@@ -34,7 +34,7 @@ describe('tadaa-runner', function() {
 			tadaarunner._requirePlugin.restore();
 
 			npm.commands = commands;
-		})
+		});
 
 		it('should call npm install for plugin', function(done) {
 			install.yields();
@@ -42,7 +42,7 @@ describe('tadaa-runner', function() {
 				assert(install.calledOnce);
 				assert.deepEqual(install.args[0][0], ["tadaa-elb"]);
 				return done();
-			})
+			});
 		});
 
 		it('should return error if npm install fails', function(done) {
@@ -51,7 +51,7 @@ describe('tadaa-runner', function() {
 				assert.equal(tadaa.start.callCount, 0);
 				assert.equal(e, 'ERROR');
 				return done();
-			})
+			});
 		});
 
 		it('should require the plugin module', function(done) {
@@ -59,7 +59,7 @@ describe('tadaa-runner', function() {
 			tadaarunner._start({ name: "TEST"}, function() {
 				assert(tadaarunner._requirePlugin.calledOnce);
 				return done();
-			})
+			});
 		});
 
 		it('should call tadaa.start with config values if they exist', function(done) {
@@ -77,7 +77,7 @@ describe('tadaa-runner', function() {
 				assert.deepEqual(tadaa.start.args[0][3], {A : "B", C: "D"});
 				assert.equal(tadaa.start.args[0][4], "aplayer");
 				return done();
-			})
+			});
 		});
 
 		it('should call tadaa.start with plugin values if config values do not exist', function(done) {
@@ -90,7 +90,7 @@ describe('tadaa-runner', function() {
 				assert.deepEqual(tadaa.start.args[0][3], {A: "AA", B: "BB"});
 				assert.equal(tadaa.start.args[0][4], "anotherplayer");
 				return done();
-			})
+			});
 		});
 
 		it('should call tadaa.start with default values if config and plugin values do not exist', function(done) {
@@ -103,7 +103,7 @@ describe('tadaa-runner', function() {
 				assert.deepEqual(tadaa.start.args[0][3], {});
 				assert.equal(tadaa.start.args[0][4], "aplay");
 				return done();
-			})
+			});
 		});
 	});
 
