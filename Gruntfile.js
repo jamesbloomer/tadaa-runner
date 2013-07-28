@@ -7,12 +7,22 @@ module.exports = function(grunt) {
     },
     watch: {
       files: ['<%= jshint.files %>'],
-      tasks: ['jshint']
+      tasks: ['jshint', 'cafemocha']
+    },
+    cafemocha: {
+      tests: {
+        src: 'test/**/*.js',
+        options: {
+            reporter: 'spec',
+            growl: true
+        }
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-cafe-mocha');
 
-  grunt.registerTask('default', ['jshint']);
+  grunt.registerTask('default', ['jshint', 'cafemocha']);
 };

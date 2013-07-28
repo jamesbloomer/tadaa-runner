@@ -42,7 +42,7 @@ tadaarunner._start = function(pluginConfig, cb) {
 		tadaa.start(
 			pluginConfig.interval || plugin.interval || 600000, 
 			pluginConfig.logic || plugin.logic || [{fn: tadaa.up, sound:"up.wav"}, {fn: tadaa.down, sound:"down.wav"}], 
-			plugin.getValue, 
+			plugin[pluginConfig.valueFn] || plugin.getValue, 
 			pluginConfig.options || plugin.options || {}, 
 			pluginConfig.player || plugin.player || 'aplay'
 		);

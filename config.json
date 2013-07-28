@@ -9,7 +9,8 @@
 	},
 	"second example plugin instance" : {
 		"interval": 3000,
-		"name" : "tadaa-example", 
+		"name" : "tadaa-example",
+		"valueFn": "otherGetValue", 
 		"options" : {
 			"message" : "second",
 			"multiplier" : 10

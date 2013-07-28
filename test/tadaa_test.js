@@ -6,16 +6,16 @@ var assert = require('assert'),
 
 describe('tadaa-runner', function() {
 	describe('_start', function() {
-		var install;
-		var commands;
+		var install, commands, mockplugin;
 
 		beforeEach(function() {
 			sinon.stub(tadaa, 'start');
 
-			var mockplugin = { 
+			mockplugin = { 
 				interval: 42, 
 				logic: [{11: "22"}, {33: "44"}], 
-				getValue: function(){ return 123456789; }, 
+				otherGetValue: function(){ return 123456789; }, 
+				getValue: function(){ return 987654321; }, 
 				options: { A: "AA", B: "BB"}, 
 				player: 'anotherplayer'
 			};
@@ -68,14 +68,16 @@ describe('tadaa-runner', function() {
 				name: "TEST", 
 				interval: 24, 
 				logic: [{1 : "2"}, {3: "4"}],
+				valueFn: "otherGetValue",
 				options: {A : "B", C: "D"},
 				player: "aplayer"
 			}, function() {
 				assert(tadaa.start.calledOnce);
 				assert.equal(tadaa.start.args[0][0], 24);
 				assert.deepEqual(tadaa.start.args[0][1], [{1 : "2"}, {3: "4"}]);
+				assert.equal(tadaa.start.args[0][2], mockplugin.otherGetValue);
 				assert.deepEqual(tadaa.start.args[0][3], {A : "B", C: "D"});
-				assert.equal(tadaa.start.args[0][4], "aplayer");
+				assert.equal(tadaa.start.args[0][4], 'aplayer');
 				return done();
 			});
 		});
@@ -86,9 +88,9 @@ describe('tadaa-runner', function() {
 				assert(tadaa.start.calledOnce);
 				assert.equal(tadaa.start.args[0][0], 42);
 				assert.deepEqual(tadaa.start.args[0][1], [{11: "22"}, {33: "44"}]);
-				assert.equal(tadaa.start.args[0][2](), 123456789);
+				assert.equal(tadaa.start.args[0][2](), 987654321);
 				assert.deepEqual(tadaa.start.args[0][3], {A: "AA", B: "BB"});
-				assert.equal(tadaa.start.args[0][4], "anotherplayer");
+				assert.equal(tadaa.start.args[0][4], 'anotherplayer');
 				return done();
 			});
 		});

@@ -1,7 +1,7 @@
 {
   "name": "tadaa-runner",
   "description": "Monitor stuff via the medium of sound.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "licenses": [
     {
       "type": "MIT",
@@ -33,7 +33,8 @@
     "sinon": "*",
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "~0.6.0",
-    "grunt-contrib-watch": "~0.5.1"
+    "grunt-contrib-watch": "~0.5.1",
+    "grunt-cafe-mocha": "~0.1.8"
   },
   "main": "./tadaa.js",
   "bin": {
