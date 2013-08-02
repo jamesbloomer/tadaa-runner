@@ -16,3 +16,6 @@ npm install tadaa-runner
 - Copy sounds to root of module directory (issue [#1](https://github.com/jamesbloomer/tadaa-runner/issues/1)).
 - ./bin/tadaa
 
+## Plugins
+- [Pivotal Tracker](https://github.com/jamesbloomer/tadaa-pivotaltracker)
+- [Zendesk](https://github.com/jamesbloomer/tadaa-zendesk)
