@@ -7,6 +7,7 @@ Tadaa Runner is a command line client for easily running multiple [tadaa](https:
 Monitor anything you want by writing a [simple plugin](https://github.com/jamesbloomer/tadaa-example). 
 
 ## Install
+Install the runner:
 ``` 
 npm install tadaa-runner
 ```
@@ -14,12 +15,17 @@ Now install any required plugins:
 ```
 npm install tadaa-zendesk --save
 ```
+Also currently need to copy any sound files required to the root of module directory (issue [#1](https://github.com/jamesbloomer/tadaa-runner/issues/1)).
 
-## Use
+
+## Configure
 - Copy example-config.js to config.js.
-- Edit config.js.
-- Copy sounds to root of module directory (issue [#1](https://github.com/jamesbloomer/tadaa-runner/issues/1)).
-- ./bin/tadaa
+- Edit config.js. See the plugins documentation for values to configure.
+
+## Run
+```
+./bin/tadaa
+```
 
 ## Plugins
 - [Pivotal Tracker](https://github.com/jamesbloomer/tadaa-pivotaltracker)
