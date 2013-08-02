@@ -10,9 +10,14 @@ Monitor anything you want by writing a [simple plugin](https://github.com/jamesb
 ``` 
 npm install tadaa-runner
 ```
+Now install any required plugins:
+```
+npm install tadaa-zendesk --save
+```
 
 ## Use
-- Edit config.json.
+- Copy example-config.js to config.js.
+- Edit config.js.
 - Copy sounds to root of module directory (issue [#1](https://github.com/jamesbloomer/tadaa-runner/issues/1)).
 - ./bin/tadaa
 

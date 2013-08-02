@@ -1,5 +1,4 @@
 var assert = require('assert'),
-	npm = require('npm'),
 	sinon = require('sinon'),
 	tadaa = require('tadaa'),
 	tadaarunner = require('../tadaarunner.js');
@@ -22,36 +21,12 @@ describe('tadaa-runner', function() {
 
 			sinon.stub(tadaarunner, '_requirePlugin').returns(mockplugin);
 
-			commands = npm.commands;
 			install = sinon.stub();
-			npm.commands = {
-				install : install
-			};
 		});
 
 		afterEach(function() {
 			tadaa.start.restore();
 			tadaarunner._requirePlugin.restore();
-
-			npm.commands = commands;
-		});
-
-		it('should call npm install for plugin', function(done) {
-			install.yields();
-			tadaarunner._start({ name: "tadaa-elb"}, function() {
-				assert(install.calledOnce);
-				assert.deepEqual(install.args[0][0], ["tadaa-elb"]);
-				return done();
-			});
-		});
-
-		it('should return error if npm install fails', function(done) {
-			install.yields('ERROR');
-			tadaarunner._start({ name: "tadaa-elb"}, function(e) {
-				assert.equal(tadaa.start.callCount, 0);
-				assert.equal(e, 'ERROR');
-				return done();
-			});
 		});
 
 		it('should require the plugin module', function(done) {
@@ -109,10 +84,10 @@ describe('tadaa-runner', function() {
 		});
 	});
 
-	describe('_loadPlugins', function() {
+	describe('run', function() {
 		beforeEach(function() {
 			sinon.stub(tadaarunner, '_start').yields();
-			sinon.stub(tadaarunner, '_requireConfig').returns({ 1 : "1", 2: "2"});
+			sinon.stub(tadaarunner, '_requireConfig').returns(function(tadaa) {return {1 : "1", 2: "2"};});
 		});
 
 		afterEach(function() {
@@ -121,60 +96,10 @@ describe('tadaa-runner', function() {
 		});
 
 		it('should call start for each plugin in config', function(done) {
-			tadaarunner._loadPlugins(function() {
+			tadaarunner.run(function() {
 				assert(tadaarunner._start.calledTwice);
 				assert.equal(tadaarunner._start.args[0][0], '1');
 				assert.equal(tadaarunner._start.args[1][0], '2');
-				return done();
-			});
-		});
-	});
-
-	describe('run', function() {
-		beforeEach(function() {
-			sinon.stub(npm, 'load');
-			sinon.stub(tadaarunner, '_loadPlugins');
-		});
-
-		afterEach(function() {
-			npm.load.restore();
-			tadaarunner._loadPlugins.restore();
-		});
-
-		it('should load npm', function(done) {
-			tadaarunner._loadPlugins.yields();
-			npm.load.yields();
-			tadaarunner.run(function(e) {
-				assert.equal(e, null);
-				assert(npm.load.calledOnce);
-				return done();
-			});
-		});
-
-		it('should return error if loading npm fails', function(done) {
-			npm.load.yields('ERROR');
-			tadaarunner.run(function(e) {
-				assert.equal(e, 'ERROR');
-				assert(npm.load.calledOnce);
-				return done();
-			});
-		});
-
-		it('should load plugins', function(done) {
-			tadaarunner._loadPlugins.yields();
-			npm.load.yields();
-			tadaarunner.run(function(e) {
-				assert.equal(e, null);
-				assert(tadaarunner._loadPlugins.calledOnce);
-				return done();
-			});
-		});
-
-		it('should return error if load plugins fails', function(done) {
-			tadaarunner._loadPlugins.yields('ERROR');
-			npm.load.yields();
-			tadaarunner.run(function(e) {
-				assert.equal(e, 'ERROR');
 				return done();
 			});
 		});
