@@ -6,7 +6,7 @@ var tadaarunner = {};
 
 tadaarunner.run = function(done) {
 	var config = tadaarunner._requireConfig("./config.js");
-	async.each(_.values(config(tadaarunner)), tadaarunner._start, done);
+	async.each(_.values(config(tadaa)), tadaarunner._start, done);
 };
 
 tadaarunner._start = function(pluginConfig, cb) {	

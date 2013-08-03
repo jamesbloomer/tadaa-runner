@@ -15,3 +15,5 @@ npm-debug.log
 
 .c9revisions/
 node_modules/
+
+config.js
