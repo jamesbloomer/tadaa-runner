@@ -30,3 +30,5 @@ Also currently need to copy any sound files required to the root of module direc
 ## Plugins
 - [Pivotal Tracker](https://github.com/jamesbloomer/tadaa-pivotaltracker)
 - [Zendesk](https://github.com/jamesbloomer/tadaa-zendesk)
+- [Thoughtworks Go](https://github.com/jamesbloomer/tadaa-go)
+- [AWS Elastic Load Balancer](https://github.com/jamesbloomer/tadaa-elb)
