@@ -1,5 +1,7 @@
 var _ = require('underscore'),
 	async = require('async'),
+	fs = require('fs'),
+	path = require('path'),
 	tadaa = require('tadaa');
 
 var tadaarunner = {};
@@ -29,6 +31,25 @@ tadaarunner._requireConfig = function(path) {
 
 tadaarunner._requirePlugin = function(name) {
 	return require(name);
+};
+
+tadaarunner._getSound = function(pluginName, sound) {
+	var pluginPath = path.dirname(require.resolve(pluginName));
+	var soundPath = path.join(pluginPath, 'sounds', sound);
+
+	if (fs.existsSync(soundPath)) {
+		return soundPath;
+	} else {
+		return path.join('./sounds', sound);
+	}
+};
+
+tadaarunner._resolveLogic = function(pluginName, logic) {
+	_.each(logic, function(item) {
+		item.sound = tadaarunner._getSound(pluginName, item.sound);
+	});
+
+	return logic;
 };
 
 module.exports = tadaarunner;

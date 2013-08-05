@@ -1,4 +1,5 @@
 var assert = require('assert'),
+	path = require('path'),
 	sinon = require('sinon'),
 	tadaa = require('tadaa'),
 	tadaarunner = require('../tadaarunner.js');
@@ -102,6 +103,29 @@ describe('tadaa-runner', function() {
 				assert.equal(tadaarunner._start.args[1][0], '2');
 				return done();
 			});
+		});
+	});
+
+	describe('_getSound', function() {
+		it('should return sound from module if it exists', function() {
+			var soundPath = tadaarunner._getSound('tadaa-example', 'up.wav');
+			var currentModulePath = path.dirname(require.resolve('../tadaarunner.js'));
+			soundPath = soundPath.replace(currentModulePath + '/', '');
+			assert.equal(soundPath, 'node_modules/tadaa-example/sounds/up.wav');
+			return;
+		});
+
+		it('should return default sound if module lacks requested', function() {
+			assert.equal(tadaarunner._getSound('tadaa-example', 'down.wav'), 'sounds/down.wav');
+			return;
+		});
+	});
+
+	describe('_resolveLogic', function() {
+		it('should resolve sound paths', function() {
+			var example = path.dirname(require.resolve('tadaa-example'));
+			var resolved = tadaarunner._resolveLogic('tadaa-example', [{fn: 'FUNCTION', sound: "up.wav"}]);
+			assert.deepEqual(resolved, [{fn: 'FUNCTION', sound: path.join(example, 'sounds', 'up.wav')}]);
 		});
 	});
 });
