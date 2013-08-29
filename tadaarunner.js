@@ -14,15 +14,23 @@ tadaarunner.run = function(done) {
 tadaarunner._start = function(pluginConfig, cb) {	
 	var plugin = tadaarunner._requirePlugin(pluginConfig.name);
 
-	tadaa.start(
-		pluginConfig.interval || plugin.interval || 600000, 
-		pluginConfig.logic || plugin.logic || [{fn: tadaa.up, sound:"up.wav"}, {fn: tadaa.down, sound:"down.wav"}], 
-		plugin[pluginConfig.valueFn] || plugin.getValue, 
-		pluginConfig.options || plugin.options || {}, 
-		pluginConfig.player || plugin.player || 'aplay'
-	);
+	var defaultPluginLogic = [{fn: tadaa.up, sound:"up.wav"}, {fn: tadaa.down, sound:"down.wav"}];
+	var logic = pluginConfig.logic || plugin.logic || defaultPluginLogic;
 
-	return cb();
+	async.each(logic, function(item, cb2) {
+		item.sound = tadaarunner._getSound(pluginConfig.name, item.sound);
+		return cb2();
+	}, function() {
+		tadaa.start(
+			pluginConfig.interval || plugin.interval || 600000, 
+			logic, 
+			plugin[pluginConfig.valueFn] || plugin.getValue, 
+			pluginConfig.options || plugin.options || {}, 
+			pluginConfig.player || plugin.player || 'aplay'
+		);
+
+		return cb();
+	});
 };
 
 tadaarunner._requireConfig = function(path) {

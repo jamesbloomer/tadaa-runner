@@ -6,14 +6,16 @@ var assert = require('assert'),
 
 describe('tadaa-runner', function() {
 	describe('_start', function() {
-		var install, commands, mockplugin;
+		var commands, mockplugin, getSound;
 
 		beforeEach(function() {
 			sinon.stub(tadaa, 'start');
+			getSound = sinon.stub(tadaarunner, '_getSound');
 
 			mockplugin = { 
+				name: "MOCK",
 				interval: 42, 
-				logic: [{11: "22"}, {33: "44"}], 
+				logic: [{fn: "FUNCTION1", sound: "SOUND1"}, {fn: "FUNCTION2", sound: "SOUND2"}], 
 				otherGetValue: function(){ return 123456789; }, 
 				getValue: function(){ return 987654321; }, 
 				options: { A: "AA", B: "BB"}, 
@@ -22,16 +24,15 @@ describe('tadaa-runner', function() {
 
 			sinon.stub(tadaarunner, '_requirePlugin').returns(mockplugin);
 
-			install = sinon.stub();
 		});
 
 		afterEach(function() {
 			tadaa.start.restore();
 			tadaarunner._requirePlugin.restore();
+			tadaarunner._getSound.restore();
 		});
 
 		it('should require the plugin module', function(done) {
-			install.yields();
 			tadaarunner._start({ name: "TEST"}, function() {
 				assert(tadaarunner._requirePlugin.calledOnce);
 				return done();
@@ -39,18 +40,19 @@ describe('tadaa-runner', function() {
 		});
 
 		it('should call tadaa.start with config values if they exist', function(done) {
-			install.yields();
+			getSound.withArgs('TEST', 'SND1').returns('./sounds/SND1');
+			getSound.withArgs('TEST', 'SND2').returns('./sounds/SND2');
 			tadaarunner._start({ 
 				name: "TEST", 
 				interval: 24, 
-				logic: [{1 : "2"}, {3: "4"}],
+				logic: [{fn : "FN1", sound: "SND1"}, {fn: "FN2", sound: "SND2"}],
 				valueFn: "otherGetValue",
 				options: {A : "B", C: "D"},
 				player: "aplayer"
 			}, function() {
 				assert(tadaa.start.calledOnce);
 				assert.equal(tadaa.start.args[0][0], 24);
-				assert.deepEqual(tadaa.start.args[0][1], [{1 : "2"}, {3: "4"}]);
+				assert.deepEqual(tadaa.start.args[0][1], [{fn : "FN1", sound: "./sounds/SND1"}, {fn: "FN2", sound: "./sounds/SND2"}]);
 				assert.equal(tadaa.start.args[0][2], mockplugin.otherGetValue);
 				assert.deepEqual(tadaa.start.args[0][3], {A : "B", C: "D"});
 				assert.equal(tadaa.start.args[0][4], 'aplayer');
@@ -59,11 +61,12 @@ describe('tadaa-runner', function() {
 		});
 
 		it('should call tadaa.start with plugin values if config values do not exist', function(done) {
-			install.yields();
-			tadaarunner._start({}, function() {
+			getSound.withArgs('MOCK', 'SOUND1').returns('./sounds/SOUND1');
+			getSound.withArgs('MOCK', 'SOUND2').returns('./sounds/SOUND2');
+			tadaarunner._start({name: "MOCK"}, function() {
 				assert(tadaa.start.calledOnce);
 				assert.equal(tadaa.start.args[0][0], 42);
-				assert.deepEqual(tadaa.start.args[0][1], [{11: "22"}, {33: "44"}]);
+				assert.deepEqual(tadaa.start.args[0][1], [{fn: "FUNCTION1", sound: "./sounds/SOUND1"}, {fn: "FUNCTION2", sound: "./sounds/SOUND2"}]);
 				assert.equal(tadaa.start.args[0][2](), 987654321);
 				assert.deepEqual(tadaa.start.args[0][3], {A: "AA", B: "BB"});
 				assert.equal(tadaa.start.args[0][4], 'anotherplayer');
@@ -72,16 +75,24 @@ describe('tadaa-runner', function() {
 		});
 
 		it('should call tadaa.start with default values if config and plugin values do not exist', function(done) {
-			install.yields();
+			getSound.withArgs('TEST', 'up.wav').returns('./sounds/up.wav');
+			getSound.withArgs('TEST', 'down.wav').returns('./sounds/down.wav');
 			tadaarunner._requirePlugin.returns({});
-			tadaarunner._start({}, function() {
+			tadaarunner._start({name: "TEST"}, function() {
 				assert(tadaa.start.calledOnce);
 				assert.equal(tadaa.start.args[0][0], 600000);
-				assert.deepEqual(tadaa.start.args[0][1], [{fn: tadaa.up, sound:"up.wav"}, {fn: tadaa.down, sound:"down.wav"}]);
+				assert.deepEqual(tadaa.start.args[0][1], [{fn: tadaa.up, sound:"./sounds/up.wav"}, {fn: tadaa.down, sound:"./sounds/down.wav"}]);
 				assert.deepEqual(tadaa.start.args[0][3], {});
 				assert.equal(tadaa.start.args[0][4], "aplay");
 				return done();
 			});
+		});
+
+		it('should call getSound for each sound in plugin logic', function(done) {
+			tadaarunner._start({}, function() {
+				assert(tadaarunner._getSound.calledTwice); 
+				return done();
+			});			
 		});
 	});
 
