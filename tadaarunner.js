@@ -39,13 +39,17 @@ tadaarunner._requirePlugin = function(name) {
 };
 
 tadaarunner._getSound = function(pluginName, sound) {
+	if (fs.existsSync(sound)) {
+		return sound;
+	}
+
 	var pluginPath = path.dirname(require.resolve(pluginName));
 	var soundPath = path.join(pluginPath, 'sounds', sound);
 
 	if (fs.existsSync(soundPath)) {
 		return soundPath;
 	} else {
-		return path.join('./sounds', sound);
+		return path.join('./sounds', sound); // TODO always get the file in case it's a full path
 	}
 };
 
