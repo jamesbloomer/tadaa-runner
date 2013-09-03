@@ -17,20 +17,17 @@ tadaarunner._start = function(pluginConfig, cb) {
 	var defaultPluginLogic = [{fn: tadaa.up, sound:"up.wav"}, {fn: tadaa.down, sound:"down.wav"}];
 	var logic = pluginConfig.logic || plugin.logic || defaultPluginLogic;
 
-	async.each(logic, function(item, cb2) {
-		item.sound = tadaarunner._getSound(pluginConfig.name, item.sound);
-		return cb2();
-	}, function() {
-		tadaa.start(
-			pluginConfig.interval || plugin.interval || 600000, 
-			logic, 
-			plugin[pluginConfig.valueFn] || plugin.getValue, 
-			pluginConfig.options || plugin.options || {}, 
-			pluginConfig.player || plugin.player || 'aplay'
-		);
+	logic = tadaarunner._resolveLogic(pluginConfig.name, logic);
 
-		return cb();
-	});
+	tadaa.start(
+		pluginConfig.interval || plugin.interval || 600000, 
+		logic, 
+		plugin[pluginConfig.valueFn] || plugin.getValue, 
+		pluginConfig.options || plugin.options || {}, 
+		pluginConfig.player || plugin.player || 'aplay'
+	);
+
+	return cb();
 };
 
 tadaarunner._requireConfig = function(path) {
