@@ -15,8 +15,8 @@ Now install any required plugins:
 ```
 npm install tadaa-zendesk --save
 ```
-Also currently need to copy any sound files required to the root of module directory (issue [#1](https://github.com/jamesbloomer/tadaa-runner/issues/1)).
 
+Any sounds required should either be in the tadaa-runner ./sounds directory or in the ./sounds directory of the plugin. 
 
 ## Configure
 - Copy example-config.js to config.js.
