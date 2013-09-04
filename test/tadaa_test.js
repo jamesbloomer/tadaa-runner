@@ -127,7 +127,7 @@ describe('tadaa-runner', function() {
 		});
 
 		it('should return default sound if module lacks requested', function() {
-			assert.equal(tadaarunner._getSound('tadaa-example', 'down.wav'), 'sounds/down.wav');
+			assert.equal(tadaarunner._getSound('tadaa-example', '/x/y/xdown.wav'), 'sounds/xdown.wav');
 			return;
 		});
 	});

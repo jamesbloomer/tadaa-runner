@@ -49,7 +49,7 @@ tadaarunner._getSound = function(pluginName, sound) {
 	if (fs.existsSync(soundPath)) {
 		return soundPath;
 	} else {
-		return path.join('./sounds', sound); // TODO always get the file in case it's a full path
+		return path.join('./sounds', path.basename(sound));
 	}
 };
 
