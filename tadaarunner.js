@@ -20,6 +20,7 @@ tadaarunner._start = function(pluginConfig, cb) {
 	logic = tadaarunner._resolveLogic(pluginConfig.name, logic);
 
 	tadaa.start(
+        pluginConfig.name,
 		pluginConfig.interval || plugin.interval || 600000, 
 		logic, 
 		plugin[pluginConfig.valueFn] || plugin.getValue, 

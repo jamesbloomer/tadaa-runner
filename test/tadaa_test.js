@@ -51,11 +51,12 @@ describe('tadaa-runner', function() {
 				player: "aplayer"
 			}, function() {
 				assert(tadaa.start.calledOnce);
-				assert.equal(tadaa.start.args[0][0], 24);
-				assert.deepEqual(tadaa.start.args[0][1], [{fn : "FN1", sound: "./sounds/SND1"}, {fn: "FN2", sound: "./sounds/SND2"}]);
-				assert.equal(tadaa.start.args[0][2], mockplugin.otherGetValue);
-				assert.deepEqual(tadaa.start.args[0][3], {A : "B", C: "D"});
-				assert.equal(tadaa.start.args[0][4], 'aplayer');
+                assert.equal(tadaa.start.args[0][0], 'TEST');
+				assert.equal(tadaa.start.args[0][1], 24);
+				assert.deepEqual(tadaa.start.args[0][2], [{fn : "FN1", sound: "./sounds/SND1"}, {fn: "FN2", sound: "./sounds/SND2"}]);
+				assert.equal(tadaa.start.args[0][3], mockplugin.otherGetValue);
+				assert.deepEqual(tadaa.start.args[0][4], {A : "B", C: "D"});
+				assert.equal(tadaa.start.args[0][5], 'aplayer');
 				return done();
 			});
 		});
@@ -65,11 +66,12 @@ describe('tadaa-runner', function() {
 			getSound.withArgs('MOCK', 'SOUND2').returns('./sounds/SOUND2');
 			tadaarunner._start({name: "MOCK"}, function() {
 				assert(tadaa.start.calledOnce);
-				assert.equal(tadaa.start.args[0][0], 42);
-				assert.deepEqual(tadaa.start.args[0][1], [{fn: "FUNCTION1", sound: "./sounds/SOUND1"}, {fn: "FUNCTION2", sound: "./sounds/SOUND2"}]);
-				assert.equal(tadaa.start.args[0][2](), 987654321);
-				assert.deepEqual(tadaa.start.args[0][3], {A: "AA", B: "BB"});
-				assert.equal(tadaa.start.args[0][4], 'anotherplayer');
+                assert.equal(tadaa.start.args[0][0], 'MOCK');
+				assert.equal(tadaa.start.args[0][1], 42);
+				assert.deepEqual(tadaa.start.args[0][2], [{fn: "FUNCTION1", sound: "./sounds/SOUND1"}, {fn: "FUNCTION2", sound: "./sounds/SOUND2"}]);
+				assert.equal(tadaa.start.args[0][3](), 987654321);
+				assert.deepEqual(tadaa.start.args[0][4], {A: "AA", B: "BB"});
+				assert.equal(tadaa.start.args[0][5], 'anotherplayer');
 				return done();
 			});
 		});
@@ -80,10 +82,11 @@ describe('tadaa-runner', function() {
 			tadaarunner._requirePlugin.returns({});
 			tadaarunner._start({name: "TEST"}, function() {
 				assert(tadaa.start.calledOnce);
-				assert.equal(tadaa.start.args[0][0], 600000);
-				assert.deepEqual(tadaa.start.args[0][1], [{fn: tadaa.up, sound:"./sounds/up.wav"}, {fn: tadaa.down, sound:"./sounds/down.wav"}]);
-				assert.deepEqual(tadaa.start.args[0][3], {});
-				assert.equal(tadaa.start.args[0][4], "aplay");
+                assert.equal(tadaa.start.args[0][0], 'TEST');
+				assert.equal(tadaa.start.args[0][1], 600000);
+				assert.deepEqual(tadaa.start.args[0][2], [{fn: tadaa.up, sound:"./sounds/up.wav"}, {fn: tadaa.down, sound:"./sounds/down.wav"}]);
+				assert.deepEqual(tadaa.start.args[0][4], {});
+				assert.equal(tadaa.start.args[0][5], "aplay");
 				return done();
 			});
 		});
