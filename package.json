@@ -1,7 +1,7 @@
 {
   "name": "tadaa-runner",
   "description": "Monitor stuff via the medium of sound.",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "license": "MIT",
   "author": {
     "name": "James Bloomer",
